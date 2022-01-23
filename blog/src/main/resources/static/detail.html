@@ -73,6 +73,7 @@
         border-radius: 5px;
         background-color: #ffffff;
         margin-bottom: 12px;
+        margin: 0 auto;
     }
 
     .card .metadata {
@@ -100,6 +101,7 @@
 
 
     .footer {
+        margin-top: 50px;
         position: relative;
         height: 40px;
     }
@@ -115,13 +117,14 @@
     }
 
     #cards-box {
-        margin-top: 12px;
-        position: center;
+
+        margin: 0 auto;
     }
 </style>
 
 <script>
-    function isValidContents(content) {
+
+    function isValidContent(content) {
         if (content == '') {
             alert('타자 칠 힘도 없어..?');
             return false;
@@ -143,7 +146,7 @@
 
     function editPost(id) {
         showEdits(id);
-        let content = $(`#${id}-contents`).text().trim();
+        let content = $(`#${id}-content`).text().trim();
         $(`#${id}-textarea`).val(content);
     }
 
@@ -152,7 +155,7 @@
         $(`#${id}-submit`).show();
         $(`#${id}-delete`).show();
 
-        $(`#${id}-contents`).hide();
+        $(`#${id}-content`).hide();
         $(`#${id}-edit`).hide();
     }
 
@@ -199,7 +202,7 @@
                            </div>
                         </div>
                     <h2 class='title' id="${id}-title">"${title}"</h2>
-                        <div class="contents" id="${id}-contents" >
+                        <div class="content" id="${id}-content" >
                            ${content}
                         </div>
                         <div class="footer">
@@ -219,13 +222,13 @@
         let name = $(`#${id}-name`).text().trim();
         let content = $(`#${id}-textarea`).val().trim();
 
-        // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
-        if (isValidContents(content) == false) {
+        // 2. 작성한 메모가 올바른지 isValidContent 함수를 통해 확인합니다.
+        if (isValidContent(content) == false) {
             return;
         }
 
         // 3. 전달할 data JSON으로 만듭니다.
-        let data = {'name': name, 'contents': content};
+        let data = {'name': name, 'content': content};
 
         // 4. PUT /api/memos/{id} 에 data를 전달합니다.
         $.ajax({
@@ -284,10 +287,10 @@
                 sundayㅎㅈ
             </div>
         </div>
-        <!-- contents 조회/수정 영역-->
+        <!-- content 조회/수정 영역-->
         <h2 class='title' id="${id}-title">일요일</h2>
-        <div class="contents">
-            <div id="1-contents" class="text">
+        <div class="content">
+            <div id="1-content" class="text">
                 아직도 할 게 한참 남았다..
             <div id="1-editarea" class="edit">
                 <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>

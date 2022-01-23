@@ -108,56 +108,45 @@
 
 
     </style>
-    <script>
 
-        function isValidContents(content) {
+    <script>
+        function isValidContent(title, name, content) {
+            if (title == '') {
+                alert('제목은 게시글의 얼굴!');
+                return false;
+            }
+            if (name == '') {
+                alert('이름을 알려줘유');
+                return false;
+            }
             if (content == '') {
-                alert('어허 뭐라도 쓰라니까!!');
-                return false;
-            }
-            if (name == ''){
-                alert('이름을 알려주세요~');
-                return false;
-            }
-            if (title == ''){
-                alert('제목은 게시글의 얼굴과 같지.');
-                return false;
-            }
-            if (content.trim().length > 300) {
-                alert('처음에 300자라 했쨔나!!');
+                alert('뭐라도 적어주ㅓ🥺');
                 return false;
             }
 
             return true;
         }
 
-
-        // 메모를 생성합니다.
         function writePost() {
-            // 1. 작성한 메모를 불러옵니다.
             let content = $('#content').val();
             let name = $('#name').val();
             let title = $('#title').val();
-
-            if (isValidContents(content, title, name) == false) {
+            if (isValidContent(title, name, content) == false) {
                 return;
             }
-
-            // 4. 전달할 data JSON으로 만듭니다.
-            let data = {'name': name, 'content': content, 'title': title};
-
-            // 5. POST /api/memos 에 data를 전달합니다.
+            let data = {'title': title, 'name': name, 'content': content};
             $.ajax({
                 type: "POST",
-                url: "/api/hjblog",
+                url: "/api/hjblog/write",
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
                     alert('내일도 무사히..🙏');
-                    location.href = 'index.html'
+                    location.href = 'index.html';
                 }
             });
         }
+
 
 
 
@@ -177,13 +166,14 @@
         </p>
     </div>
     <div class="area-write">
+<!--왜 타입으로 해놔서^^ null alert힘들었따-->
         <div class="form-floating mb-3">
-            <input type="title" class="form-control" id="title" placeholder="제 목">
-            <input type="name" class="form-control" id="name" placeholder="닉네임">
+            <label for="title"></label><input name="title" class="form-control" id="title" placeholder="타이틀">
+            <label for="name"></label><input name="name" class="form-control" id="name" placeholder="항해자">
         </div>
-        <textarea class="field" placeholder="오늘의 항해는 어땠는가~" name="contents" id="contents" cols="30"
-                  rows="10"></textarea>
-        <button class="btn btn-danger" onclick="writePost()"> 바다에 띄우기 </button>
+        <label for="content"></label><textarea class="field" placeholder="오늘의 항해는 어땠는가~" name="content" id="content" cols="30"
+                                               rows="10"></textarea>
+        <button class="btn btn-danger" onclick="writePost()" alt=""> 바다에 띄우기 </button>
 
     </div>
 </div>

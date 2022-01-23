@@ -70,16 +70,18 @@
 
         .card {
             width: 538px;
+            height: 70px;
             border-radius: 5px;
             background-color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+
         }
 
         .card .metadata {
             position: relative;
             display: flex;
-            font-size: 11px;
-            font-weight: normal;
+            font-size: 13px;
+            font-weight: bold;
             font-stretch: normal;
             font-style: normal;
             line-height: 1;
@@ -98,10 +100,14 @@
             margin-left: 20px;
         }
 
+        .title{
+            margin-left: 5px;
+        }
 
         .footer {
             position: relative;
-            height: 40px;
+            height: 0px;
+            color: white;
         }
 
 
@@ -111,7 +117,7 @@
             bottom: 12px;
             right: 19px;
             width: 14px;
-            height: 18px;
+            height: 15px;
         }
 
         #cards-box {
@@ -119,15 +125,6 @@
         }
     </style>
     <script>
-
-        function delArticleConfirm(id){
-            if (confirm("정말 태우시게요?") == true){
-                delPost(id);
-            } else {
-                return;
-            }
-        }
-
 
         $(document).ready(function () {
             getBlogs();
@@ -160,7 +157,7 @@
         }
 
         function addfunc(id, name, title, createdAt){
-            return `<div href="detail.html?id=${id}">
+            return `<a href="detail.html?id=${id}" class = postbox>
                         <div class="card">
                             <!-- date/name 영역 -->
                             <div class="metadata">
@@ -173,27 +170,12 @@
                             </div>
                             <div class="title" id="${id}-title"> ${title} </div>
                         </div>
-                        <div class="footer">
-                            <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delArticleConfirm('${id}')">
-                        </div>
-                            </div>`
+                            </a>`
             // 2. #cards-box 에 HTML을 붙인다.
 
         }
 
 
-        // 메모를 삭제합니다.
-        function deleteOne(id) {
-            // 1. DELETE /api/memos/{id} 에 요청해서 메모를 삭제합니다.
-            $.ajax({
-                type: "DELETE",
-                url: `/api/hjblog/${id}`,
-                success: function (response) {
-                    alert('잿더미만 남았습니다.');
-                    window.location.reload();
-                }
-            })
-        }
     </script>
 </head>
 
@@ -214,7 +196,7 @@
     </div>
 
 
-
+    <a href="detail.html?id=${id}" class = postbox>
     <div id="cards-box" class="area-read">
         <div class="card">
             <!-- date/name 영역 -->
@@ -227,14 +209,11 @@
                 </div>
             </div>
             <div class="title">
-                <a id="1-title" href="api/hjblog/1" style="font-size: medium ">뭐라도 적어볼까 </a>
-            </div>
-            <!-- 버튼 영역-->
-            <div class="footer">
-                <img id="1-delete" class="icon-delete" src="images/delete.png" alt="" onclick="deleteOne('1')">
+                <a id="1-title"  style="font-size: medium ">뭐라도 적어볼까 </a>
             </div>
         </div>
     </div>
+    </a>
 </div>
 </body>
 
