@@ -115,6 +115,14 @@
                 alert('어허 뭐라도 쓰라니까!!');
                 return false;
             }
+            if (name == ''){
+                alert('이름을 알려주세요~');
+                return false;
+            }
+            if (title == ''){
+                alert('제목은 게시글의 얼굴과 같지.');
+                return false;
+            }
             if (content.trim().length > 300) {
                 alert('처음에 300자라 했쨔나!!');
                 return false;
@@ -131,13 +139,7 @@
             let name = $('#name').val();
             let title = $('#title').val();
 
-            if (isValidContents(content) == false) {
-                return;
-            }
-            if (isValidContents(name) == false) {
-                return;
-            }
-            if (isValidContents(title) == false) {
+            if (isValidContents(content, title, name) == false) {
                 return;
             }
 
