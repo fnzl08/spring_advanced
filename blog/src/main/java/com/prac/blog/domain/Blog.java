@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @NoArgsConstructor //lombok, 기본 생성자를 자동으로
 @Entity //그냥 클래스 아니고 이거 데이터베이스로 테이블 역 할거야
-@Getter
+@Getter //get 함수 일괄 생성
 
 //생성, 수정 시간 자동으로 만들어준다. 상속
 public class Blog extends Timestamped  {
@@ -26,6 +26,12 @@ public class Blog extends Timestamped  {
 
     @Column(nullable = false)
     private  String content;
+
+    public Blog(String title, String name, String contents) {
+        this.title = title;
+        this.name = name;
+        this.content = contents;
+    }
 
 
     public Blog( BlogRequestDto requestDto){
