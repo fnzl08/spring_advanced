@@ -21,7 +21,7 @@ public class Blog extends Timestamped  {
     @Column(nullable = false)  //컬럼값이고 반드시 존재해야 함을 나타낸다. not null
     private String title;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private  String name;
 
     @Column(nullable = false)
