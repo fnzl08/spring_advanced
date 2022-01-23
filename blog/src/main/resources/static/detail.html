@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쉬지 말고 노 저으세</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+
+
+<style>
+    .wrap {
+        width: 538px;
+        margin: 10px auto;
+    }
+
+
+    .area-write img {
+        cursor: pointer;
+        position: absolute;
+        width: 22.2px;
+        height: 18.7px;
+        bottom: 15px;
+        right: 17px;
+    }
+
+    .background-header {
+        position: fixed;
+        z-index: -1;
+        top: 0px;
+        width: 70%;
+        height: 150px;
+        background-color: #0064cd ;
+        margin-left : 210px;
+    }
+
+    .header {
+        margin-top: 50px;
+    }
+
+    .header h2 {
+        height: 33px;
+        font-size: 42px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0.79;
+        letter-spacing: -0.5px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .header p {
+        margin: 40px auto;
+        width: 217px;
+        height: 48px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -1.12px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+
+    .card {
+        width: 538px;
+        border-radius: 5px;
+        background-color: #ffffff;
+        margin-bottom: 12px;
+    }
+
+    .card .metadata {
+        position: relative;
+        display: flex;
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: -0.77px;
+        text-align: left;
+        color: #adb5bd;
+        height: 14px;
+        padding: 10px 23px;
+    }
+
+    .card .metadata .date {
+
+    }
+
+    .card .metadata .name {
+        margin-left: 20px;
+    }
+
+
+    .footer {
+        position: relative;
+        height: 40px;
+    }
+
+
+    .footer img.icon-delete {
+        cursor: pointer;
+        position: absolute;
+        bottom: 12px;
+        right: 19px;
+        width: 14px;
+        height: 18px;
+    }
+
+    #cards-box {
+        margin-top: 12px;
+        position: center;
+    }
+</style>
+
+<script>
+    function isValidContents(content) {
+        if (content == '') {
+            alert('타자 칠 힘도 없어..?');
+            return false;
+        }
+        if (content.trim().length > 300) {
+            alert('이렇게 할 말이 많다고..?300자 이내야');
+            return false;
+        }
+        return true;
+    }
+
+    function delPostConfirm(){
+        if (confirm("정말 태우시게요?") == true){
+            delPost(id);
+        } else {
+            return;
+        }
+    }
+
+    function editPost(id) {
+        showEdits(id);
+        let content = $(`#${id}-contents`).text().trim();
+        $(`#${id}-textarea`).val(content);
+    }
+
+    function showEdits(id) {
+        $(`#${id}-editarea`).show();
+        $(`#${id}-submit`).show();
+        $(`#${id}-delete`).show();
+
+        $(`#${id}-contents`).hide();
+        $(`#${id}-edit`).hide();
+    }
+
+
+
+//------------------------------------------------------
+    $(document).ready(function () {
+        getPosts();
+    })
+
+
+    function getPosts() {
+        $('#cards-box').empty();
+        let detail_id = location.href.split("id=")[1]; //localhost/detail.html?id=12
+        $.ajax({
+            type: 'GET',
+            url: `/api/hjblog/${detail_id}`,
+            date: {},
+            success: function (response) {
+                let blog = response;
+                let id = blog.id;
+                let name = blog.name;
+                let title = blog.title;
+                let content = blog.content;
+                let createdAt = blog.createdAt;
+                addHTML(id, name, title, content, createdAt )
+            }
+        })
+    }
+
+    function addHTML(id, name, title, content, createdAt) {
+        let temp_html = makePost(id, name, title, content, createdAt)
+        $('#cards-box').append(temp_html);
+        }
+
+        function makePost (id, name, title, content, createdAt)    {
+            return `<div class="card">
+                        <div class="metadata">
+                           <div id="${id}-name" class="name">
+                               ${name}
+                           </div>
+                           <div class="date">
+                               ${createdAt}
+                           </div>
+                        </div>
+                    <h2 class='title' id="${id}-title">"${title}"</h2>
+                        <div class="contents" id="${id}-contents" >
+                           ${content}
+                        </div>
+                        <div class="footer">
+                    <img id="${id}-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('${id}')">
+                    <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPostConfirm()">
+                    <img id="${id}-submit" class="icon-end-edit" src="images/done.png" alt="" onclick="submitEdit('${id}')">
+                </div>
+                    </div>`;
+        }
+
+
+
+
+    // 메모를 수정합니다.
+    function submitEdit(id) {
+        // 1. 작성 대상 메모의 name과 content 를 확인합니다.
+        let name = $(`#${id}-name`).text().trim();
+        let content = $(`#${id}-textarea`).val().trim();
+
+        // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+        if (isValidContents(content) == false) {
+            return;
+        }
+
+        // 3. 전달할 data JSON으로 만듭니다.
+        let data = {'name': name, 'contents': content};
+
+        // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+        $.ajax({
+            type: "PUT",
+            url: `/api/hjblog/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                alert('바꿔치기 성공!!');
+                window.location.reload();
+            }
+        });
+    }
+
+
+    function delPost(id) {
+        $.ajax({
+            type: "DELETE",
+            url: `/api/hjblog/${id}`,
+            success: function (response) {
+                alert('잿더미가 되었습니다.');
+                location.replace("/api/hjblog")
+            }
+        })
+    }
+
+
+
+
+
+
+
+</script>
+</head>
+<body>
+<div class="background-header">
+
+</div>
+
+<div class="wrap">
+    <div class="header">
+        <h2>X월 X일. 오늘도 무사히 🥺</h2>
+    </div>
+</div>
+
+
+
+<div id="cards-box" class="area-read">
+    <div class="card">
+        <!-- date/name 영역 -->
+        <div class="metadata">
+            <div class="date">
+                January 24, 2022
+            </div>
+            <div class="name">
+                sundayㅎㅈ
+            </div>
+        </div>
+        <!-- contents 조회/수정 영역-->
+        <h2 class='title' id="${id}-title">일요일</h2>
+        <div class="contents">
+            <div id="1-contents" class="text">
+                아직도 할 게 한참 남았다..
+            <div id="1-editarea" class="edit">
+                <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+            </div>
+        </div>
+        <!-- 버튼 영역-->
+        <div class="footer">
+            <img id="1-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('1')">
+            <img id="1-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPostConfirm()">
+            <img id="1-submit" class="icon-end-edit" src="images/done.png" alt="" onclick="submitEdit('1')">
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>
