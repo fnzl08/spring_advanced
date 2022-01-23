@@ -19,7 +19,7 @@ public class BlogController{
     private final BlogService blogService;
 
     //Create, Post방식으로 요청이 들어올거다.는 restcontroller / 요청오면 아래 메소드 진행
-    @PostMapping("/api/hjblog")
+    @PostMapping("/api/hjblog/write")
     public Blog createBlog(@RequestBody BlogRequestDto requestDto){
         Blog blog = new Blog(requestDto);  //requestDto에 있는 데이터가 알아서 blog 들어가 채워줄거다.
         return blogRepository.save(blog); //방금 생성한 blog 리턴
