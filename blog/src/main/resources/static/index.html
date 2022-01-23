@@ -42,7 +42,7 @@
 
         .header h2 {
             height: 33px;
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 500;
             font-stretch: normal;
             font-style: normal;
@@ -55,7 +55,7 @@
         .header p {
             margin: 40px auto;
             width: 217px;
-            height: 48px;
+            height: 20px;
             font-family: 'Noto Sans KR', sans-serif;
             font-size: 16px;
             font-weight: 500;
@@ -70,7 +70,7 @@
 
         .card {
             width: 538px;
-            height: 70px;
+            height: 80px;
             border-radius: 5px;
             background-color: #ffffff;
             margin-bottom: 10px;
@@ -101,7 +101,7 @@
         }
 
         .title{
-            margin-left: 5px;
+            margin-left: 20px;
         }
 
         .footer {
@@ -157,7 +157,7 @@
         }
 
         function addfunc(id, name, title, createdAt){
-            return `<a href="detail.html?id=${id}" class = postbox>
+            return `<div class = postbox>
                         <div class="card">
                             <!-- date/name 영역 -->
                             <div class="metadata">
@@ -165,12 +165,12 @@
                                     ${createdAt}
                                  </div>
                                  <div id="${id}-name" class="name">
-                                        "항해자" ${name}
+                                        항해자 : ${name}
                                  </div>
                             </div>
-                            <div class="title" id="${id}-title"> ${title} </div>
+                            <a class="title" href="detail.html?id=${id}"  id="${id}-title"> ${title} </a>
                         </div>
-                            </a>`
+                            </div>`
             // 2. #cards-box 에 HTML을 붙인다.
 
         }
@@ -191,7 +191,7 @@
             ☠️ day-xx 조난자가 띄웁니다. ☠️
         </p>
         <div align="center">
-            <button class="btn btn-danger" onclick="location.href='write.html'" > 바다에 띄우기 </button>
+            <button class="btn btn-danger" onclick="location.href='write.html'" style="width: 100px; margin-bottom: 15px"> 바다에 띄우기 </button>
         </div>
     </div>
 
@@ -208,9 +208,9 @@
                     새벽네시ㅎㅈ
                 </div>
             </div>
-            <div class="title">
+            <a class="title" href="detail.html?id=${id}">
                 <a id="1-title"  style="font-size: medium ">뭐라도 적어볼까 </a>
-            </div>
+            </a>
         </div>
     </div>
     </a>

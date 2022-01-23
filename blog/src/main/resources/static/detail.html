@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>쉬지 말고 노 저으세</title>
+    <title>헤엄헤엄</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
 
 
 <style>
@@ -31,8 +30,8 @@
         z-index: -1;
         top: 0px;
         width: 70%;
-        height: 150px;
-        background-color: #0064cd ;
+        height: 90%;
+        background-color: #0a6ecd ;
         margin-left : 210px;
     }
 
@@ -42,7 +41,7 @@
 
     .header h2 {
         height: 33px;
-        font-size: 42px;
+        font-size: 38px;
         font-weight: 500;
         font-stretch: normal;
         font-style: normal;
@@ -72,7 +71,6 @@
         width: 538px;
         border-radius: 5px;
         background-color: #ffffff;
-        margin-bottom: 12px;
         margin: 0 auto;
     }
 
@@ -125,12 +123,8 @@
 <script>
 
     function isValidContent(content) {
-        if (content == '') {
-            alert('타자 칠 힘도 없어..?');
-            return false;
-        }
-        if (content.trim().length > 300) {
-            alert('이렇게 할 말이 많다고..?300자 이내야');
+       if (content == '') {
+            alert('뭐라도 써달라구!!');
             return false;
         }
         return true;
@@ -163,16 +157,15 @@
 
 //------------------------------------------------------
     $(document).ready(function () {
-        getPosts();
+        getBlogs();
     })
 
-
-    function getPosts() {
+    function getBlogs() {
         $('#cards-box').empty();
         let detail_id = location.href.split("id=")[1]; //localhost/detail.html?id=12
         $.ajax({
             type: 'GET',
-            url: `/api/hjblog/${detail_id}`,
+            url: `/api/hjblog/detail.html?${detail_id}`,
             date: {},
             success: function (response) {
                 let blog = response;
@@ -202,9 +195,16 @@
                            </div>
                         </div>
                     <h2 class='title' id="${id}-title">"${title}"</h2>
-                        <div class="content" id="${id}-content" >
+
+            <!--  조회/수정 -->
+                        <div class="content">
+                         <div id="${id}-content" class="text" >
                            ${content}
                         </div>
+                        <div id = "${id}-editarea" class="edit">
+                        <textarea id="${id}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                        </div>
+            <!--버튼영역  -->
                         <div class="footer">
                     <img id="${id}-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('${id}')">
                     <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPostConfirm()">
@@ -293,7 +293,7 @@
             <div id="1-content" class="text">
                 아직도 할 게 한참 남았다..
             <div id="1-editarea" class="edit">
-                <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                <textarea id="1-textarea" class="te-edit" name="" cols="30" rows="5"></textarea>
             </div>
         </div>
         <!-- 버튼 영역-->

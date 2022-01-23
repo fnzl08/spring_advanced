@@ -29,7 +29,7 @@ public class BlogController{
 
     //Read, GET방식. {반환방식 리스트 메모, 필요재료 없고 찾을 땐 repo써서 다 찾아서 modifiedat이라는 변수가 있는데 그걸로 최신청렬해줘
     @GetMapping("/api/hjblog")
-    public List<Blog> getBlog() { return blogRepository.findAllByOrderByModifiedAtDesc();}
+    public List<Blog> getBlog() { return blogRepository.findAllByOrderByCreatedAtDesc();}
 
     // 게시글 특정 조회
     @GetMapping("/api/hjblog/{id}")
