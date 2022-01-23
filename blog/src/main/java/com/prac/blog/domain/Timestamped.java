@@ -20,7 +20,7 @@ public abstract class Timestamped{
 
     //이렇게 멤버 두개 가지고, 자료형은 localdatetime 자바의 시간형태
     @CreatedDate
-    private LocalDateTime createdZAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;

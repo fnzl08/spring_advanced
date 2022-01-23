@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>헤엄헤엄</title>
+    <title>헤엄헤</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
 
 
 <style>
@@ -71,6 +72,7 @@
         width: 538px;
         border-radius: 5px;
         background-color: #ffffff;
+        margin-bottom: 12px;
         margin: 0 auto;
     }
 
@@ -122,11 +124,20 @@
 
 <script>
 
-    function isValidContent(content) {
-       if (content == '') {
+    function isValidContent(title, name, content) {
+        if (title == '') {
+            alert('어허 제목');
+            return false;
+        }
+        if (name == '') {
+            alert('어허 이름');
+            return false;
+        }
+        if (content == '') {
             alert('뭐라도 써달라구!!');
             return false;
         }
+
         return true;
     }
 
@@ -157,15 +168,16 @@
 
 //------------------------------------------------------
     $(document).ready(function () {
-        getBlogs();
+        getPosts();
     })
 
-    function getBlogs() {
+
+    function getPosts() {
         $('#cards-box').empty();
         let detail_id = location.href.split("id=")[1]; //localhost/detail.html?id=12
         $.ajax({
             type: 'GET',
-            url: `/api/hjblog/detail.html?${detail_id}`,
+            url: `/api/hjblog/${detail_id}`,
             date: {},
             success: function (response) {
                 let blog = response;
@@ -196,15 +208,9 @@
                         </div>
                     <h2 class='title' id="${id}-title">"${title}"</h2>
 
-            <!--  조회/수정 -->
                         <div class="content">
-                         <div id="${id}-content" class="text" >
                            ${content}
                         </div>
-                        <div id = "${id}-editarea" class="edit">
-                        <textarea id="${id}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
-                        </div>
-            <!--버튼영역  -->
                         <div class="footer">
                     <img id="${id}-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('${id}')">
                     <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPostConfirm()">
@@ -270,7 +276,10 @@
 
 <div class="wrap">
     <div class="header">
-        <h2>X월 X일. 오늘도 무사히 🥺</h2>
+        <h2>XX월 XX일. 오늘도 무사히 🐋</h2>
+        <p>
+            이 시간들이 쌓이면 멋진 섬에 깃발 꽂게 될 날이 올거야.
+        </p>
     </div>
 </div>
 
@@ -293,7 +302,7 @@
             <div id="1-content" class="text">
                 아직도 할 게 한참 남았다..
             <div id="1-editarea" class="edit">
-                <textarea id="1-textarea" class="te-edit" name="" cols="30" rows="5"></textarea>
+                <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
             </div>
         </div>
         <!-- 버튼 영역-->
