@@ -1,11 +1,10 @@
-package com.prac.blog.controller;
+package com.prac.blog.Controller;
 
 
 import com.prac.blog.Dto.BlogRequestDto;
 import com.prac.blog.Service.BlogService;
 import com.prac.blog.domain.Blog;
 import com.prac.blog.domain.BlogRepository;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
