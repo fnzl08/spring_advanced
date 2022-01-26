@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ㅎㅈ 생존일지</title>
 
+    <meta property="og:title" content="ㅎㅈ 생존일지">
+    <meta property="og:description" content="과연 그는 무사히 살아남아 섬에 깃발을 꽂을 수 있을 것인가..">
+    <meta property="og:image" content="images/pado.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
 
     <style>
+
+        *{
+            font-family: 'Poor Story', cursive;
+        }
 
         .wrap {
             width: 538px;
@@ -30,10 +37,9 @@
             position: fixed;
             z-index: -1;
             top: 0px;
-            width: 70%;
-            height: 90%;
+            width: 100%;
+            height: 100%;
             background-color: #288cd2 ;
-            margin-left : 210px;
         }
 
         .header {
@@ -126,6 +132,12 @@
     </style>
     <script>
 
+        // function delPostConfirm(){
+        //     if (confirm("정말 태우시게요?") == true){
+        //         delPost(id);
+        //     }
+        // }
+
         $(document).ready(function () {
             getBlogs();
         })
@@ -156,7 +168,7 @@
             $('#cards-box').append(tempHtml);
         }
 
-        function addfunc(id, name, title, createdAt){
+        function addfunc (id, name, title, createdAt){
             return `<div class = postbox>
                         <div class="card">
                             <!-- date/name 영역 -->
@@ -170,9 +182,26 @@
                             </div>
                             <a class="title" href="detail.html?id=${id}"  id="${id}-title"> ${title} </a>
                         </div>
+                        <div class="footer">
+                            <img id="${id}-delete" class="icon-delete" src="images/delete.png" style="margin-bottom: 10px" alt="" onclick="delPost('${id}')">
+                        </div>
                             </div>`
             // 2. #cards-box 에 HTML을 붙인다.
 
+        }
+
+        //alart창 따로 띄워서 오류 오지게 남.... ㅠㅠ이제 된다ㅠㅠㅠ
+        function delPost(id) {
+            if (confirm("정말 태우시게요?") == true) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/hjblog/${id}`,
+                    success: function (response) {
+                        alert('잿더미가 되었습니다.');
+                        window.location.reload();
+                    }
+                })
+            }
         }
 
 
@@ -211,6 +240,9 @@
             <a class="title" href="detail.html?id=${id}">
                 <a id="1-title"  style="font-size: medium ">뭐라도 적어볼까 </a>
             </a>
+        </div>
+        <div class="footer">
+            <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPost('1')">
         </div>
     </div>
     </a>

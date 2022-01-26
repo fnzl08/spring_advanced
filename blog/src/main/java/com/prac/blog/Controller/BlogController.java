@@ -45,9 +45,11 @@ public class BlogController{
     //Delete, 뭐 받아서 삭제할지, id니까 long해주고, id 아직 뭔지 모르니까 주소로 들어올 때 path 경로에 중괄호에 있는거 받을게
     @DeleteMapping("/api/hjblog/{id}")
     public Long deleteBlog(@PathVariable Long id){
+        System.out.println(id);
         blogRepository.deleteById(id);
         return id;
     }
+
 
     //Update, 주소에서 받아와야하니까 @path 에 id값 들어가고, 바디로 오는건 requestdto에 들어간다.
     //id 관련 메모 찾아서 requestdto에 있는 내용으로 업데이트

@@ -4,13 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>헤엄헤</title>
+    <title>헤엄헤엄</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
 
 <style>
+
+    *{
+        font-family: 'Poor Story', cursive;
+    }
+
     .wrap {
         width: 538px;
         margin: 10px auto;
@@ -30,10 +34,9 @@
         position: fixed;
         z-index: -1;
         top: 0px;
-        width: 70%;
-        height: 90%;
+        width: 100%;
+        height: 100%;
         background-color: #0a6ecd ;
-        margin-left : 210px;
     }
 
     .header {
@@ -54,7 +57,7 @@
 
     .header p {
         margin: 40px auto;
-        width: 217px;
+        width: 400px;
         height: 48px;
         font-family: 'Noto Sans KR', sans-serif;
         font-size: 16px;
@@ -72,14 +75,14 @@
         width: 538px;
         border-radius: 5px;
         background-color: #ffffff;
-        margin-bottom: 12px;
         margin: 0 auto;
     }
 
     .card .metadata {
+        margin-top: 10px;
         position: relative;
         display: flex;
-        font-size: 11px;
+        font-size: 15px;
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
@@ -97,8 +100,17 @@
 
     .card .metadata .name {
         margin-left: 20px;
+        margin-right: 5px;
     }
 
+    .title{
+        margin-left: 20px;
+    }
+
+    .content{
+        margin-left: 30px;
+        margin-right: 30px;
+    }
 
     .footer {
         margin-top: 50px;
@@ -124,49 +136,6 @@
 
 <script>
 
-    function isValidContent(title, name, content) {
-        if (title == '') {
-            alert('어허 제목');
-            return false;
-        }
-        if (name == '') {
-            alert('어허 이름');
-            return false;
-        }
-        if (content == '') {
-            alert('뭐라도 써달라구!!');
-            return false;
-        }
-
-        return true;
-    }
-
-    function delPostConfirm(){
-        if (confirm("정말 태우시게요?") == true){
-            delPost(id);
-        } else {
-            return;
-        }
-    }
-
-    function editPost(id) {
-        showEdits(id);
-        let content = $(`#${id}-content`).text().trim();
-        $(`#${id}-textarea`).val(content);
-    }
-
-    function showEdits(id) {
-        $(`#${id}-editarea`).show();
-        $(`#${id}-submit`).show();
-        $(`#${id}-delete`).show();
-
-        $(`#${id}-content`).hide();
-        $(`#${id}-edit`).hide();
-    }
-
-
-
-//------------------------------------------------------
     $(document).ready(function () {
         getPosts();
     })
@@ -212,60 +181,24 @@
                            ${content}
                         </div>
                         <div class="footer">
-                    <img id="${id}-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('${id}')">
-                    <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPostConfirm()">
-                    <img id="${id}-submit" class="icon-end-edit" src="images/done.png" alt="" onclick="submitEdit('${id}')">
-                </div>
+                            <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPost('${id}')">
+                        </div>
                     </div>`;
         }
 
 
-
-
-    // 메모를 수정합니다.
-    function submitEdit(id) {
-        // 1. 작성 대상 메모의 name과 content 를 확인합니다.
-        let name = $(`#${id}-name`).text().trim();
-        let content = $(`#${id}-textarea`).val().trim();
-
-        // 2. 작성한 메모가 올바른지 isValidContent 함수를 통해 확인합니다.
-        if (isValidContent(content) == false) {
-            return;
+        function delPost(id) {
+            if (confirm("정말 태우시게요?") == true) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/hjblog/${id}`,
+                    success: function (response) {
+                        alert('잿더미가 되었습니다.');
+                        location.href = 'index.html';
+                    }
+                })
+            }
         }
-
-        // 3. 전달할 data JSON으로 만듭니다.
-        let data = {'name': name, 'content': content};
-
-        // 4. PUT /api/memos/{id} 에 data를 전달합니다.
-        $.ajax({
-            type: "PUT",
-            url: `/api/hjblog/${id}`,
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function (response) {
-                alert('바꿔치기 성공!!');
-                window.location.reload();
-            }
-        });
-    }
-
-
-    function delPost(id) {
-        $.ajax({
-            type: "DELETE",
-            url: `/api/hjblog/${id}`,
-            success: function (response) {
-                alert('잿더미가 되었습니다.');
-                location.replace("/api/hjblog")
-            }
-        })
-    }
-
-
-
-
-
-
 
 </script>
 </head>
@@ -276,14 +209,12 @@
 
 <div class="wrap">
     <div class="header">
-        <h2>XX월 XX일. 오늘도 무사히 🐋</h2>
+        <h2>XX월 XX일.  오늘도 무사히 🐋</h2>
         <p>
-            이 시간들이 쌓이면 멋진 섬에 깃발 꽂게 될 날이 올거야.
+            이 시간들이 쌓이면 멋진 섬에 깃발 꽂게 될 날이 올거야!
         </p>
     </div>
 </div>
-
-
 
 <div id="cards-box" class="area-read">
     <div class="card">
@@ -296,20 +227,14 @@
                 sundayㅎㅈ
             </div>
         </div>
-        <!-- content 조회/수정 영역-->
         <h2 class='title' id="${id}-title">일요일</h2>
         <div class="content">
             <div id="1-content" class="text">
                 아직도 할 게 한참 남았다..
-            <div id="1-editarea" class="edit">
-                <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
-            </div>
         </div>
         <!-- 버튼 영역-->
         <div class="footer">
-            <img id="1-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('1')">
-            <img id="1-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPostConfirm()">
-            <img id="1-submit" class="icon-end-edit" src="images/done.png" alt="" onclick="submitEdit('1')">
+            <img id="1-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPost('1')">
         </div>
     </div>
 </div>
