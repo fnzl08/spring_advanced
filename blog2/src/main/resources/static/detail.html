@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헤엄헤엄</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+
+<style>
+
+    *{
+        font-family: 'Poor Story', cursive;
+    }
+
+    .edit {
+        display: none;
+        pardding-left: 23px;
+    }
+
+    .wrap {
+        width: 538px;
+        margin: 10px auto;
+    }
+
+    .background-header {
+        position: fixed;
+        z-index: -1;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #0a6ecd ;
+    }
+
+    .backcolor{
+        background-color: #0a6ecd;
+    }
+
+    .header {
+        margin-top: 50px;
+    }
+
+    .header h2 {
+        margin-top: 60px;
+        height: 33px;
+        font-size: 40px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0.79;
+        letter-spacing: -0.5px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .header p {
+        margin: 40px auto;
+        width: 400px;
+        height: 48px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -1.12px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    textarea.field {
+        width: 502px;
+        font-family: 'Noto Sans KR', sans-serif;
+        height: 30px;
+        border-radius: 5px;
+        background-color: #ffffff;
+        border: none;
+        padding: 18px;
+        resize: none;
+    }
+
+
+    textarea.field::placeholder {
+        width: 216px;
+        height: 16px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: -0.96px;
+        text-align: left;
+        color: #868e96;
+    }
+
+
+    .area-write img{
+        cursor: pointer;
+        position: relative;
+        width: 22.2px;
+        height: 18.7px;
+        bottom: 50px;
+        left: 500px;
+    }
+
+
+    .card {
+
+        border-radius: 5px;
+        background-color: #ffffff;
+        margin-bottom: 150px;
+        padding-bottom: 20px;
+    }
+
+    .comment-card{
+
+        border-radius: 5px;
+        background-color: #ffffff;
+        margin-bottom: 150px;
+        padding-bottom: 20px;
+    }
+
+    .card .metadata {
+        margin-top: 10px;
+        position: relative;
+        display: flex;
+        font-size: 15px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: -0.77px;
+        text-align: left;
+        color: #adb5bd;
+        height: 14px;
+        padding: 10px 23px;
+    }
+
+    .card .metadata .date {
+
+    }
+
+    .card .metadata .name {
+        margin-left: 20px;
+        margin-right: 5px;
+    }
+
+    .comment-metadata{
+        margin-left: 20px;
+    }
+
+    .title{
+        margin-left: 20px;
+    }
+
+    .content{
+        padding: 0px 23px;
+        word-wrap: break-word;
+        word-break: break-all;
+        margin-left: 30px;
+    }
+
+    .comment-content{
+        padding: 0px 23px;
+        word-wrap: break-word;
+        word-break: break-all;
+        margin-top: 8px;
+    }
+
+    .content div.edit {
+        display: none;
+    }
+
+
+    .footer {
+        height: 40px;
+        top: 15px;
+        position: relative;
+
+    }
+
+    .footer img.icon-start-edit {
+        cursor: pointer;
+        position: absolute;
+        bottom: 14px;
+        right: 55px;
+        width: 18px;
+        height: 18px;
+    }
+    .footer img.icon-delete {
+        cursor: pointer;
+        position: absolute;
+        bottom: 14px;
+        right: 19px;
+        width: 14px;
+        height: 18px;
+    }
+
+    .footer img.icon-end-edit {
+        cursor: pointer;
+        position: absolute;
+        display: none;
+        bottom: 14px;
+        right: 55px;
+        width: 20px;
+        height: 15px;
+    }
+
+
+    #cards-box {
+        margin-top: 100px;
+    }
+
+    .card h2 {
+        margin-left: 30px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #000000;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    #home{
+        text-decoration: none;
+        color: #ffffff;
+        display: inline;
+        text-align: left;
+        font-size: 30px;
+    }
+
+    #login-text, #signup-text, #logout-text{
+        text-decoration: none;
+        color: #ffffff;
+        display: inline;
+        text-align: left;
+        font-size: 15px;
+    }
+
+
+
+
+</style>
+
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        getPosts();
+        getComments();
+    })
+
+
+    function getPosts() {
+        $('#cards-box').empty();
+        $('#comment-box').empty();
+        let detail_id = location.href.split("id=")[1];
+        $.ajax({
+            type: 'GET',
+            url: `/api/hjblog/${detail_id}`,
+            date: {},
+            success: function (response) {
+                let blog = response;
+                let id = blog.id;
+                let name = blog.name;
+                let title = blog.title;
+                let content = blog.content;
+                let modifiedAt = blog.modifiedAt;
+                addHTML(id, name, title, content, modifiedAt )
+            }
+        })
+    }
+
+    function addHTML(id, name, title, content, modifiedAt) {
+        let temp_html = makePost(id, name, title, content, modifiedAt)
+        $('#cards-box').append(temp_html);
+        }
+
+        function makePost (id, name, title, content, modifiedAt)    {
+            let loginname = [[$name]];
+            let hide = ""
+            if(loginname != name){
+                hide = "hide"
+            }
+            return `<div class="card">
+                        <div class="metadata">
+                           <div id="${id}-name" class="name">
+                               ${name}
+                           </div>
+                           <div class="date">
+                               ${modifiedAt}
+                           </div>
+                        </div>
+                    <h2 class='title' id="${id}-title">"${title}"</h2>
+
+                        <div class="content" id="${id}-content">
+                           ${content}
+                        </div>
+                        <div class="footer" ${hide}>
+                            <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPost('${id}')">
+                        </div>
+                    </div>`;
+        }
+
+
+        function delPost(id) {
+            if (confirm("정말 태우시게요?") == true) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/hjblog/${id}`,
+                    success: function (response) {
+                        alert('잿더미가 되었습니다.');
+                        location.href = 'index.html';
+                    }
+                })
+            }
+        }
+
+//        댓글
+        function getComments(){
+        let contentId = location.href.split("id=")[1];
+        $.ajax({
+            type: "GET",
+            url: `/api/comment/${contentId}`,
+            data: {},
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    let blog = response[i];
+                    let id = blog.id;
+                    let name = blog.name;
+                    let comment = blog.comment;
+                    let modifiedAt = blog.modifiedAt;
+                    addCommentHTML(id, name, comment, modifiedAt);
+                }
+            }
+        });
+        }
+
+        //댓글 붙이기
+    function addCommentHTML(id, name, comment, modifiedAt) {
+        let tempHtml = makeComment(id, name, comment, modifiedAt);
+        $('#comment-box').append(tempHtml);
+    }
+
+    // 댓글의 형태를 만들어 줍니다.
+    function makeComment(id, name, comment, modifiedAt) {
+        let loginname = [[${name}]];
+        console.log(loginname)
+        let hide = "hide"
+        if (loginname == name) {
+            hide = ""
+        }
+        return `<div class="card">
+                        <div class="metadata">
+                           <div id="${id}-name" class="name">
+                               ${name}
+                           </div>
+                           <div class="date">
+                               ${modifiedAt}
+                           </div>
+                        </div>
+                        <div class="content" id="${id}-comment" >
+                           ${comment}
+                        </div>
+                        <div id="${id}-editarea" class="edit">
+                            <textarea id="${id}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                        </div>
+                            <div class="footer ${hide}">
+                                <img id="${id}-edit" class="icon-start-edit" src="images/edit.png" alt="" onClick="editPost('${id}')">
+                                <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onClick="delPost('${id}')">
+                                <img id="${id}-submit" class="icon-end-edit" src="images/done.png" alt="" onClick="submitEdit('${id}')">
+                            </div>
+                    </div>`;
+    }
+
+    // 수정 버튼을 눌렀을 때, 기존 작성 내용을 수정박스(textarea)에 전달합니다.
+    function editPost(id) {
+        showEdits(id);
+        let content = $(`#${id}-comment`).text().trim();
+        $(`#${id}-textarea`).val(content);
+    }
+
+    // 숨길 버튼을 숨기고, 나타낼 버튼을 나타냅니다.
+    function showEdits(id) {
+        $(`#${id}-editarea`).show();
+        $(`#${id}-submit`).show();
+        $(`#${id}-delete`).show();
+
+        $(`#${id}-comment`).hide();
+        $(`#${id}-edit`).hide();
+    }
+
+    // 수정된 댓글을 put 요청 보내 update 합니다.
+    function submitEdit(id) {
+        // 1. 작성 대상 메모 contents 를 확인합니다
+        let comment = $(`#${id}-textarea`).val().trim();
+        // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+        if (isValidContent(comment) == false) {
+            return;
+        }
+        // 3. 전달할 data JSON으로 만듭니다.
+        let data = {"comment": comment};
+        // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+        $.ajax({
+            type: "PUT",
+            url: `/api/comment/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                alert('메시지 변경에 성공하였습니다.');
+                window.location.reload();
+            }
+        });
+    }
+
+    // 글이 정상인지 확인
+    function isValidContent(content) {
+        if (content == '') {
+            alert('댓글 내용을 입력해주세요');
+            return false;
+        }
+        return true;
+    }
+
+    // 댓글을 작성하고 post 요청을 보내 저장합니다.
+    function writeComment() {
+        let contentId = location.href.split("id=")[1];
+        var name = [[${name}]];
+        let comment = $('#comment').val();
+        if (isValidContent(comment) == false) {
+            return;
+        }
+
+        let data = {'contentId': contentId, 'name': name, 'comment': comment};
+        $.ajax({
+            type: "POST",
+            url: "/api/comment",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                if (response == true) {
+                    alert('메시지가 성공적으로 작성되었습니다.');
+                    window.location.reload();
+                } else {
+                    alert('로그인을 해주세요');
+                    window.location.replace("/user/login");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('로그인을 해주세요');
+                window.location.replace("/user/login");
+            }
+        });
+    }
+
+    // 댓글의 id 값을 받아 해당 댓글을 삭제합니다.
+    function deleteComment(id) {
+        if (confirm("정말 삭제하시겠습니까??") == false) {
+            return
+        }
+        $.ajax({
+            type: "DELETE",
+            url: `/api/comment/${id}`,
+            success: function (response) {
+                alert('댓글 삭제에 성공하였습니다.');
+                window.location.reload();
+            }
+        })
+    }
+
+</script>
+</head>
+<body class="backcolor">
+<div class="background-header">
+
+</div>
+
+<div class="wrap">
+    <div class="header">
+        <a href="/" id="home">Home  | </a>
+        <a sec:authorize="!isAuthenticated()" id="login-text" href="/user/login">
+            로그인
+        </a>
+        <a sec:authorize="!isAuthenticated()" id="signup-text" href="/user/signup">
+            회원가입
+        </a>
+        <a sec:authorize="isAuthenticated()" id="logout-text" href="/user/logout">
+            로그아웃
+        </a>
+
+        <h2>XX월 XX일.  오늘도 무사히 🐋</h2>
+        <p>
+            이 시간들이 쌓이면 멋진 섬에 깃발 꽂게 될 날이 올거야!
+        </p>
+    </div>
+
+<div id="cards-box" class="area-read">
+    <div class="card">
+        <!-- date/name 영역 -->
+        <div class="metadata">
+            <div class="date">
+                January 24, 2022
+            </div>
+            <div class="name">
+                sundayㅎㅈ
+            </div>
+        </div>
+        <h2 class='title' id="${id}-title">일요일</h2>
+        <div class="content">
+            <div id="1-content" class="text">
+                아직도 할 게 한참 남았다..
+        </div>
+            <div id="1-editarea" class="edit">
+            </div>
+        <!-- 버튼 영역-->
+        <div class="footer">
+            <img id="1-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('1')">
+            <img id="1-delete" class="icon-delete" src="images/delete.png" alt="" onclick="deleteComment('1')">
+            <img id="1-submit" class="icon-end-edit" src="images/done.png" alt="" onclick="submitEdit('1')">
+        </div>
+    </div>
+    </div>
+<div class="area-write">
+        <textarea class="field" placeholder="댓글을 입력해주세요" name="comment" id="comment" cols="30"
+                  rows="3"></textarea>
+    <img src="images/send.png" alt="" onclick="writeComment()">
+</div>
+<div id="comment-box" class="area-read">
+    <div class="comment-card">
+        <div class="comment-metadata">
+            <div id="${id}-name" class="name">
+                ${name}
+                ${modifiedAt}
+            </div>
+        </div>
+        <div class="comment-content" id="${id}-content">
+            ${content}
+        </div>
+        </a>
+        <div class="footer">
+            <img id="${id}-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('${id}')">
+            <img id="${id}-delete" class="icon-delete" src="images/delete.png" alt="" onclick="delPost('${id}')">
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>
